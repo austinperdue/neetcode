@@ -45,6 +45,9 @@
 # 0 <= balance[i], money <= 1012
 # At most 104 calls will be made to each function transfer, deposit, withdraw.
 
+
+# Time complexity: O(1) for each operation
+# Space complexity: O(n) where n is the number of accounts
 class Bank:
 
     def __init__(self, balance: List[int]):
@@ -53,26 +56,35 @@ class Bank:
     def isValid(self, account: int) -> bool:
         return 1 <= account <= len(self.balance)
         
-
     def transfer(self, account1: int, account2: int, money: int) -> bool:
-        if self.isValid(account1) and self.isValid(account2) and money <= self.balance[account1 - 1]:
-            return True
-        return False
+        # check if both accounts are valid first
+        if not (self.isValid(account1) and self.isValid(account2)):
+            return False
+        # check if there is enough money in the account
+        if self.balance[account1 - 1] < money:
+            return False    
+        # now perform the transfer
+        self.balance[account1 - 1] -= money
+        self.balance[account2 - 1] += money
+        return True
         
-
     def deposit(self, account: int, money: int) -> bool:
-        if account >= 1 and account < len(self.balance) + 1:
-            self.balance[account - 1] += money
-            return True
-        return False
+        # check if the account isvalid
+        if not self.isValid(account):
+            return False
+        # deposit the money
+        self.balance[account - 1] += money
+        return True
         
-
     def withdraw(self, account: int, money: int) -> bool:
-        if account >= 1 and account < len(self.balance) + 1:
-            self.balance[account - 1] -= money
-            return True
-        return False
-        
+        # check if the account isvalid
+        if not self.isValid(account):
+            return False
+        # check if there is enough money to withdraw
+        if self.balance[account - 1] < money:
+            return False
+        self.balance[account - 1] -= money
+        return True
 
 
 # Your Bank object will be instantiated and called as such:
