@@ -37,8 +37,3 @@ class Solution:
         
         # can also just sort them and return
         # return sorted(s) == sorted(t)
-
-        
-
-
-        
